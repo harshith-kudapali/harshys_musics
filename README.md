@@ -279,3 +279,120 @@ To install and configure Tailwind CSS with Vite:
 
 📖 [shadcn UI with Vite Documentation](https://ui.shadcn.com/docs/installation/vite)
 
+
+
+## Step 2: Create a React App using Vite
+
+To create a new React app with TypeScript using Vite, run the following commands:
+
+```sh
+npm create vite@latest clerk-react -- --template react-ts
+cd clerk-react
+npm install
+npm run dev
+```
+
+## Step 2: Install Clerk React SDK
+
+The Clerk React SDK provides prebuilt components, hooks, and helpers for authentication.
+To install the SDK, run:
+
+```sh
+npm install @clerk/clerk-react
+```
+
+## Step 3: Set Up Clerk API Keys
+
+1. Navigate to the **Clerk Dashboard** → **API keys** page.
+2. Copy your **Clerk Publishable Key** from the **Quick Copy** section.
+3. Add it to your `.env` file:
+
+```sh
+VITE_CLERK_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
+```
+
+## Step 4: Import the Clerk Publishable Key
+
+Modify `src/main.tsx` to include the Clerk Publishable Key:
+
+```tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+// Import Clerk Publishable Key
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error('Add your Clerk Publishable Key to the .env file');
+}
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+## Step 5: Wrap the App with `<ClerkProvider>`
+
+Modify `src/main.tsx` to wrap the app with `<ClerkProvider>`:
+
+```tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+import { ClerkProvider } from '@clerk/clerk-react';
+
+// Import Clerk Publishable Key
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error('Add your Clerk Publishable Key to the .env file');
+}
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+      <App />
+    </ClerkProvider>
+  </React.StrictMode>
+);
+```
+
+## Step 6: Create a Header with Clerk Components
+
+Modify `src/App.tsx` to include authentication controls:
+
+```tsx
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+
+export default function App() {
+  return (
+    <header>
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+    </header>
+  );
+}
+```
+
+## Step 7: Run the Project and Create Your First User
+
+Start your project:
+
+```sh
+npm run dev
+```
+
+Visit [http://localhost:5173](http://localhost:5173) and sign up to create your first user.
+
+---
+
+For more details, visit the [Clerk React Quickstart Guide](https://clerk.com/docs/quickstarts/react).
